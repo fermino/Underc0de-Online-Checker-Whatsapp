@@ -11,46 +11,58 @@
 		$WP_Nickname = "Underc0de's bot";
 		#### END CONFIG ####
 		
-		require_once('api/whatsprot.class.php');
+		$Enabled = file_get_contents('enabled.dat');
 		
-		$Sended = file_get_contents('issended.dat');
-		
-		$Headers = get_headers($URL, 1);
-		
-		if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK')
+		if($Enabled == 'true')
 		{
-			$M = "Underc0de Online Checker - by fermino - http://underc0de.org/fermino\r\n\r\n";
-				
-			$M .= "Error in " . $URL . "\r\n\r\n";
-				
-			$M .= "Error code: " . $Headers[0] . "\r\n";
-			$M .= "Date: " . date('d/m/Y H:i:s') . "\r\n";
+			require_once('api/whatsprot.class.php');
 			
-			if($Sended == 'false')
+			$Sended = file_get_contents('issended.dat');
+			
+			$Headers = get_headers($URL, 1);
+			
+			if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK')
 			{
-				$w = new WhatsProt($WP_Username, $WP_Identity, $WP_Nickname);
-				$w->connect();
+				$M = "Underc0de Online Checker - by fermino - http://underc0de.org/fermino\r\n\r\n";
+					
+				$M .= "Error in " . $URL . "\r\n\r\n";
+					
+				$M .= "Error code: " . $Headers[0] . "\r\n";
+				$M .= "Date: " . date('d/m/Y H:i:s') . "\r\n";
 				
-				$w->loginWithPassword($WP_Password);
-				
-				foreach($Numbers as $To)
+				if($Sended == 'false')
 				{
-					$w->sendMessage($To, $M);
+					$w = new WhatsProt($WP_Username, $WP_Identity, $WP_Nickname);
+					$w->connect();
+					
+					$w->loginWithPassword($WP_Password);
+					
+					foreach($Numbers as $To)
+					{
+						$w->sendMessage($To, $M);
+					}
+					
+					echo $M;
+					
+					$File = fopen('issended.dat', 'w');
+					fwrite($File, 'true');
+					fclose($File);
 				}
-				
-				$File = fopen('issended.dat', 'w');
-				fwrite($File, 'true');
-				fclose($File);
+			}
+			else
+			{
+				echo 'Everything is OK in ' . $URL;
+				if($Sended == 'true')
+				{
+					$File = fopen('issended.dat', 'w');
+					fwrite($File, 'false');
+					fclose($File);
+				}
 			}
 		}
 		else
 		{
-			if($Sended == 'true')
-			{
-				$File = fopen('issended.dat', 'w');
-				fwrite($File, 'false');
-				fclose($File);
-			}
+			echo 'OnlineChecker is disabled. ';
 		}
 	}
 	catch (Exception $E)
