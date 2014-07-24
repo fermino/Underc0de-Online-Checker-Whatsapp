@@ -19,7 +19,7 @@
 		
 		if($Headers[0] != 'HTTP/1.0 200 OK' || $Headers[0] != 'HTTP/1.1 200 OK')
 		{
-			$M = "WhatsBot Online Checker - by fermino - http://underc0de.org/fermino\r\n\r\n";
+			$M = "Underc0de Online Checker - by fermino - http://underc0de.org/fermino\r\n\r\n";
 			
 			$M .= "Error in " . $URL . "\r\n\r\n";
 			
