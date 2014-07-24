@@ -5,9 +5,9 @@
 		$URL = 'http://github.com/ferminolaiz/url_that_not_exists'; // URL to check
 		$To = ''; // Number to send the error report
 		
-		$WP_Username = "";
-		$WP_Password = "";
-		$WP_Identity = "";
+		$WP_Username = '';
+		$WP_Password = '';
+		$WP_Identity = '';
 		$WP_Nickname = "Underc0de's bot";
 		#### END CONFIG ####
 		
