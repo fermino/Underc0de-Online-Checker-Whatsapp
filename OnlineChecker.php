@@ -21,21 +21,21 @@
 			
 			$Headers = get_headers($URL, 1);
 			
+			$w = new WhatsProt($WP_Username, $WP_Identity, $WP_Nickname);
+			$w->connect();
+				
+			$w->loginWithPassword($WP_Password);
+			
 			if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK')
 			{
-				$M = "Underc0de Online Checker - by fermino - http://underc0de.org/fermino\r\n\r\n";
-					
-				$M .= "Error in " . $URL . "\r\n\r\n";
-					
-				$M .= "Error code: " . $Headers[0] . "\r\n";
-				$M .= "Date: " . date('d/m/Y H:i:s') . "\r\n";
-				
 				if($Sended == 'false')
 				{
-					$w = new WhatsProt($WP_Username, $WP_Identity, $WP_Nickname);
-					$w->connect();
+					$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n";
 					
-					$w->loginWithPassword($WP_Password);
+					$M .= "Error in " . $URL . "\r\n\r\n";
+					
+					$M .= "Error code: " . $Headers[0] . "\r\n";
+					$M .= "Date: " . date('d/m/Y H:i:s');
 					
 					foreach($Numbers as $To)
 					{
@@ -51,9 +51,18 @@
 			}
 			else
 			{
-				echo 'Everything is OK in ' . $URL;
 				if($Sended == 'true')
 				{
+					$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n";
+					
+					$M .= $URL . " back online\r\n\r\n";
+					$M .= "Date: " . date('d/m/Y H:i:s');
+					
+					foreach($Numbers as $To)
+					{
+						$w->sendMessage($To, $M);
+					}
+					
 					$File = fopen('issended.dat', 'w');
 					fwrite($File, 'false');
 					fclose($File);
