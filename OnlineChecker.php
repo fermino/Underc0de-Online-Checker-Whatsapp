@@ -4,6 +4,7 @@
 		### START CONFIG ###
 		$URL = 'http://github.com/ferminolaiz/url_that_not_exists';
 		$Numbers = Array('');
+		$OKPrint = false; // False if is running on cron job (This will avoid overload of cron log)
 		
 		$WP_Username = '';
 		$WP_Password = '';
@@ -51,6 +52,7 @@
 			}
 			else
 			{
+				if($OKPrint) echo 'Everything is OK in ' . $URL;
 				if($Sended == 'true')
 				{
 					$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n";
@@ -71,7 +73,7 @@
 		}
 		else
 		{
-			echo 'OnlineChecker is disabled. ';
+			if($OKPrint) echo 'OnlineChecker is disabled. ';
 		}
 	}
 	catch (Exception $E)
