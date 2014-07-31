@@ -5,6 +5,7 @@
 		$URL = 'http://github.com/ferminolaiz/url_that_not_exists'; // URL to check
 		$Numbers = Array(''); // Whatsapp numbers to send notification
 		$OKPrint = false; // False if is running on cron job (This will avoid overload of cron log)
+		$TestForMessages = true; // True to check if incoming messages are like "status". "status" will return the actual status of $URL
 		
 		$WP_Username = ''; // Whatsapp number
 		$WP_Password = ''; // Whatsapp password (Use WART to generate)
@@ -20,7 +21,7 @@
 			
 			$Sended = file_get_contents('issended.dat'); // Get state of notification
 			
-			$Headers = get_headers($URL, 1); // Get URL headers
+			$Headers = get_headers($URL, 1); // Get $URL headers
 			
 			$w = new WhatsProt($WP_Username, $WP_Identity, $WP_Nickname); // Load an instance of WhatsApi class
 			$w->connect(); // Connect WhatsApi to whatsapp server
@@ -75,6 +76,8 @@
 		{
 			if($OKPrint) echo 'OnlineChecker is disabled. '; // Show that OC is disabled (only if OC isn't running in cron [$OKPrint])
 		}
+		
+		unset($Numbers, $WP_Username, $WP_Password, $WP_Identity, $WP_Nickname);
 	}
 	catch (Exception $E) // Catch the exception
 	{
