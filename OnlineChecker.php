@@ -5,7 +5,6 @@
 		$URL = 'http://github.com/ferminolaiz/url_that_not_exists'; // URL to check
 		$Numbers = Array(''); // Whatsapp numbers to send notification
 		$OKPrint = false; // False if is running on cron job (This will avoid overload of cron log)
-		$TestForMessages = true; // True to check if incoming messages are like "status". "status" will return the actual status of $URL
 		
 		$WP_Username = ''; // Whatsapp number
 		$WP_Password = ''; // Whatsapp password (Use WART to generate)
