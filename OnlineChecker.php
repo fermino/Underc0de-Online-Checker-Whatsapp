@@ -101,11 +101,11 @@
 		{
 			if($OKPrint) echo 'OnlineChecker is disabled. '; // Show that OC is disabled (only if OC isn't running in cron [$OKPrint])
 		}
-		
-		unset($Numbers, $WP_Username, $WP_Password, $WP_Identity, $WP_Nickname); // Unset sensible data
 	}
 	catch (Exception $E) // Catch the exception
 	{
 		var_dump($E); // Var dump the exception
 	}
+	
+	unset($Numbers, $WP_Username, $WP_Password, $WP_Identity, $WP_Nickname, $w); // Unset sensible data
 ?>
