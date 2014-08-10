@@ -108,4 +108,5 @@
 	}
 	
 	unset($Numbers, $WP_Username, $WP_Password, $WP_Identity, $WP_Nickname, $w); // Unset sensible data
+	@unlink('nextChallenge.dat');
 ?>
