@@ -12,6 +12,19 @@
 		$WP_Nickname = "Underc0de's bot"; // Bot's nickname
 		#### END CONFIG ####
 		
+		if(!file_exists('enabled.dat')) // If file isn't created
+		{
+			$File = fopen('enabled.dat', 'w'); // Open the notification state file
+			fwrite($File, 'false'); // Save state
+			fclose($File); // Close file
+		}
+		if(!file_exists('issended.dat')) // If file isn't created
+		{
+			$File = fopen('issended.dat', 'w'); // Open the notification state file
+			fwrite($File, 'false'); // Save state
+			fclose($File); // Close file
+		}
+		
 		$Enabled = file_get_contents('enabled.dat'); // Get the state of enabled.dat (true/false) (Modified in control panel)
 		
 		if($Enabled == 'true') // If the OC (OnlineChecker) is enabled ==>
@@ -27,7 +40,7 @@
 				
 			$w->loginWithPassword($WP_Password); // Login in Whatsapp servers
 			
-			if($Headers != false)
+			if($Headers != false) // If can resolve hostname
 			{
 				if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK') // If URL's http code isn't 200 (OK) ==>
 				{
@@ -73,7 +86,7 @@
 					}
 				}
 			}
-			else
+			else // If can't resolve hostname
 			{
 				if($Sended == 'false') // If notification state is false ==>
 				{
@@ -81,7 +94,7 @@
 				
 					$M .= "Error in " . $URL . "\r\n\r\n"; // Generate message
 				
-					$M .= "Can't resolve hostname\r\n"; // Generate message
+					$M .= "Error: Can't resolve hostname\r\n"; // Generate message
 					$M .= "Date: " . date('d/m/Y H:i:s'); // Generate message
 				
 					foreach($Numbers as $To) // Numbers to send message
@@ -108,5 +121,5 @@
 	}
 	
 	unset($Numbers, $WP_Username, $WP_Password, $WP_Identity, $WP_Nickname, $w); // Unset sensible data
-	@unlink('nextChallenge.dat');
+	@unlink('nextChallenge.dat'); // Delete nextChallenge.dat
 ?>
