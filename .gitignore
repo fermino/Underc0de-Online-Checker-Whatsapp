@@ -7,3 +7,4 @@ extras/documentation
 .project
 *.prefs
 nextChallenge.dat
+*.test.php
