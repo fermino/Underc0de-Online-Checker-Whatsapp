@@ -58,6 +58,8 @@
 							$w->sendMessage($To, $M); // Send message to number
 						}
 						
+						unset($To); // Unset $To variable ($To isn't removed in foreach loop)
+						
 						echo $M; // Show the error (Cron Job's log)
 						
 						$File = fopen('issended.dat', 'w'); // Open the notification state file
@@ -80,6 +82,8 @@
 							$w->sendMessage($To, $M); // Send message to number
 						}
 						
+						unset($To); // Unset $To variable ($To isn't removed in foreach loop)
+						
 						$File = fopen('issended.dat', 'w'); // Open the notification state file
 						fwrite($File, 'false'); // Save state
 						fclose($File); // Close file
@@ -90,23 +94,32 @@
 			{
 				if($Sended == 'false') // If notification state is false ==>
 				{
-					$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n"; // Generate message
-				
-					$M .= "Error in " . $URL . "\r\n\r\n"; // Generate message
-				
-					$M .= "Error: Can't resolve hostname\r\n"; // Generate message
-					$M .= "Date: " . date('d/m/Y H:i:s'); // Generate message
-				
-					foreach($Numbers as $To) // Numbers to send message
+					if(@get_headers('http://google.com') != false)
 					{
-						$w->sendMessage($To, $M); // Send message to number
+						$M = "Underc0de Online Checker\r\n\r\n"; // Generate message
+				
+						$M .= "Error in " . $URL . "\r\n\r\n"; // Generate message
+					
+						$M .= "Error: Can't resolve hostname\r\n"; // Generate message
+						$M .= "Date: " . date('d/m/Y H:i:s'); // Generate message
+					
+						foreach($Numbers as $To) // Numbers to send message
+						{
+							$w->sendMessage($To, $M); // Send message to number
+						}
+						
+						unset($To); // Unset $To variable ($To isn't removed in foreach loop)
+						
+						echo $M; // Show the error (Cron Job's log)
+					
+						$File = fopen('issended.dat', 'w'); // Open the notification state file
+						fwrite($File, 'true'); // Save state
+						fclose($File); // Close file
 					}
-				
-					echo $M; // Show the error (Cron Job's log)
-				
-					$File = fopen('issended.dat', 'w'); // Open the notification state file
-					fwrite($File, 'true'); // Save state
-					fclose($File); // Close file
+					else
+					{
+						if($OKPrint) echo 'Problem with local server connection. ';
+					}
 				}
 			}
 		}

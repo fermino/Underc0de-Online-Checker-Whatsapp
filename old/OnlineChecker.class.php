@@ -17,7 +17,7 @@
 			{
 				$w = new WhatsProt($WP_U, $WP_I, $WP_N);
 				$w->connect();
-				
+				//BINDEAR EVENTOS
 				$w->loginWithPassword($WP_P);
 				
 				OnlineChecker::$BotName = strtolower($B_N);
@@ -93,6 +93,55 @@
 			catch (Exception $E)
 			{
 				return $E;
+			}
+		}
+		
+		public static function OnGetMessage($I, $From, $ID, $Type, $Time, $Name, $Message)
+		{
+			$From = str_replace('@whatsapp.net', '', $From);
+			$MessageLCase = strtolower($Message);
+			
+			$Commands = explode(' ', $MessageLCase);
+			
+			if(isset($Commands[0]))
+			{
+				if($Commands[0] == '!' . OnlineChecker::$BotName)
+				{
+					switch ($Commands[1])
+					{
+						case 'state':
+							$Headers = get_headers(OnlineChecker::$URL, 1); // Get $URL headers
+							
+							if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK') // If URL's http code isn't 200 (OK) ==>
+							{
+								$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n"; // Generate message
+									
+								$M .= "Error in " . OnlineChecker::$URL . "\r\n\r\n"; // Generate message
+									
+								$M .= "Error code: " . $Headers[0] . "\r\n"; // Generate message
+								$M .= "Date: " . date('d/m/Y H:i:s'); // Generate message
+								
+								OnlineChecker::$Whatsapp->sendMessage($From, $M);
+							}
+							else // If headers are 200 (OK)
+							{
+								$M = "Underc0de Online Checker - by fermino - http://underc0de.org/profile/fermino\r\n\r\n"; // Generate message
+									
+								$M .= 'All in ' . OnlineChecker::$URL . " is OK\r\n\r\n"; // Generate message
+								$M .= "Date: " . date('d/m/Y H:i:s'); // Generate message
+
+								OnlineChecker::$Whatsapp->sendMessage($From, $M);
+							}
+							break;
+						default:
+							OnlineChecker::$Whatsapp->sendMessage($From, 'Unrecognized error');
+							break;
+					}
+				}
+				else
+				{
+					OnlineChecker::$Whatsapp->sendMessage($From, 'Send commands as !' . OnlineChecker::$BotName . ' <command> <arguments>');
+				}
 			}
 		}
 		
