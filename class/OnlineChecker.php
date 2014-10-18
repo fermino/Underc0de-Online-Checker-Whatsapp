@@ -1,20 +1,32 @@
 <?php
     require_once 'whatsapi/whatsprot.class.php';
+    require_once 'Catcher.php';
     require_once 'Logger.php';
  
     const NL = "\n";
  
     class OnlineChecker
     {
+        private $Catcher = null;
+        private $Logger = null;
+
         private $Whatsapp = null;
  
         private $URL = null;
         private $Numbers = null;
  
-        function __construct($WP_U, $WP_I, $WP_P, $WP_N, $URL, $N)
+        function __construct($WP_U, $WP_I, $WP_P, $WP_N, $URL, $N, Catcher &$C = null, Logger &$L = null)
         {
             try
             {
+                if($L == null)
+                    $L = new Logger();
+                if($C == null)
+                    $C = new Catcher($L);
+
+                $this->Catcher = $C;
+                $this->Logger = $L;
+
                 $this->Whatsapp = new WhatsProt($WP_U, $WP_I, $WP_N);
                 $this->Whatsapp->connect();
                 $this->Whatsapp->loginWithPassword($WP_P);
@@ -43,8 +55,7 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
-                trigger_error($E->getMessage, E_USER_ERROR);
+                $this->Catcher->onException($E, true);
             }
         }
  
@@ -108,9 +119,8 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
-                trigger_error($E->getMessage, E_USER_ERROR);
-                return false; // If user has set an error handler and it doesn't die()
+                $this->Catcher->onException($E);
+                return false;
             }
         }
  
@@ -140,8 +150,8 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
-                return null;
+                $this->Catcher->onException($E);
+                return false;
             }
         }
  
@@ -170,7 +180,7 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
+            	$this->Catcher->onException($E);
                 return false;
             }
         }
@@ -208,7 +218,7 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
+            	$this->Catcher->onException($E);
                 return false;
             }
         }
@@ -231,7 +241,7 @@
             }
             catch (Exception $E)
             {
-            	Logger::logError($E->getMessage(), $E->getLine(), $E->getFile());
+            	$this->Catcher->onException($E);
                 return false;
             }
         }
