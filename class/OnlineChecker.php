@@ -90,6 +90,8 @@
  
                             if(!self::setConfig('sended', 'true'))
                                 return -7;
+
+                            $this->Logger->log($M);
  
                             return $M;
                         }
@@ -107,6 +109,8 @@
  
                             if(!self::setConfig('sended', 'false'))
                                 return -7;
+
+                            $this->Logger->log($M);
  
                             return $M;
                         }
