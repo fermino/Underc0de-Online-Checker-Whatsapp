@@ -77,7 +77,7 @@
                     if($Sended === null)
                         return -4;
  
-                    if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK')
+                    if($Headers[0] != 'HTTP/1.0 200 OK' && $Headers[0] != 'HTTP/1.1 200 OK' && $Headers[0] != 'HTTP/2.0 200 OK')
                     {
                         if(!$Sended)
                         {
